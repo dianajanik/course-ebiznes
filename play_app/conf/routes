@@ -1,0 +1,31 @@
+
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+GET     /                           controllers.HomePageController.index
+GET     /auth                       controllers.AuthController.index
+
+GET     /products/:id               controllers.ProductController.getById(id: String)
+GET     /products                   controllers.ProductController.getAll
+PUT     /products/:id               controllers.ProductController.putById(id: String)
+POST    /products                   controllers.ProductController.post
+
+GET     /users                      controllers.UserController.getAll
+GET     /users/:id                  controllers.UserController.getById(id: String)
+PUT     /users/:id                  controllers.ProductController.putById(id: String)
+POST    /users                      controllers.ProductController.post
+
+GET     /orders                     controllers.OrderController.getAll
+GET     /orders/:id                 controllers.OrderController.getById(id: String)
+PUT     /orders/:id                 controllers.OrderController.putById(id: String)
+POST    /orders                     controllers.OrderController.post
+
+GET     /categories                 controllers.CategoryController.getAll
+GET     /categories/:id             controllers.CategoryController.getById(id: String)
+PUT     /categories/:id             controllers.CategoryController.putById(id: String)
+POST    /categories                 controllers.CategoryController.post
+
+GET     /stock                      controllers.StockController.getAll
+GET     /stock/:id                  controllers.StockController.getById(id: String)
+PUT     /stock/:id                  controllers.StockController.putById(id: String)
+POST    /stock                      controllers.StockController.post
