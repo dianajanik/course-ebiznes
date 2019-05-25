@@ -6,7 +6,7 @@ package models
 
 import play.api.libs.json._
 
-case class Stock(idStock: Int, idProduct: Int, quantity: Int
+case class Stock(idStock: Int, idProduct: Int, quantity: Int)
 
 object Stock {
   implicit val stockFormat = Json.format[Stock]

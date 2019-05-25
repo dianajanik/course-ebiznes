@@ -5,27 +5,27 @@
 GET     /                           controllers.HomePageController.index
 GET     /auth                       controllers.AuthController.index
 
-GET     /products/:id               controllers.ProductController.getById(id: String)
+GET     /products/:id               controllers.ProductController.getById(id: Int)
 GET     /products                   controllers.ProductController.getAll
-PUT     /products/:id               controllers.ProductController.putById(id: String)
+PUT     /products/:id               controllers.ProductController.putById(id: Int)
 POST    /products                   controllers.ProductController.post
 
 GET     /users                      controllers.UserController.getAll
-GET     /users/:id                  controllers.UserController.getById(id: String)
-PUT     /users/:id                  controllers.ProductController.putById(id: String)
+GET     /users/:id                  controllers.UserController.getById(id: Int)
+PUT     /users/:id                  controllers.ProductController.putById(id: Int)
 POST    /users                      controllers.ProductController.post
 
 GET     /orders                     controllers.OrderController.getAll
-GET     /orders/:id                 controllers.OrderController.getById(id: String)
-PUT     /orders/:id                 controllers.OrderController.putById(id: String)
+GET     /orders/:id                 controllers.OrderController.getById(id: Int)
+PUT     /orders/:id                 controllers.OrderController.putById(id: Int)
 POST    /orders                     controllers.OrderController.post
 
 GET     /categories                 controllers.CategoryController.getAll
-GET     /categories/:id             controllers.CategoryController.getById(id: String)
-PUT     /categories/:id             controllers.CategoryController.putById(id: String)
+GET     /categories/:id             controllers.CategoryController.getById(id: Int)
+PUT     /categories/:id             controllers.CategoryController.putById(id: Int)
 POST    /categories                 controllers.CategoryController.post
 
 GET     /stock                      controllers.StockController.getAll
-GET     /stock/:id                  controllers.StockController.getById(id: String)
-PUT     /stock/:id                  controllers.StockController.putById(id: String)
+GET     /stock/:id                  controllers.StockController.getById(id: Int)
+PUT     /stock/:id                  controllers.StockController.putById(id: Int)
 POST    /stock                      controllers.StockController.post

@@ -14,12 +14,14 @@ import models.CategoryRepository
   *
   * @param dbConfigProvider The Play db config provider. Play will inject this for you.
   */
+
 @Singleton
 class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categoryRepository: CategoryRepository)(implicit ec: ExecutionContext) {
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
+
 
   class ProductTable(tag: Tag) extends Table[Product](tag, "Product"){
 
@@ -30,15 +32,15 @@ class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categ
     def productDescription = column[String]("productDescription")
     def productPhoto = column[String]("productPhoto")
     def productNotSaled = column[Boolean]("productNotSaled")
-    def productCategory_fk = foreignKey("cat_fk",productCategory, category)(_.idCategory)
+    private def productCategory_fk = foreignKey("cat_fk",productCategory, category)(_.idCategory)
 
     def * = (idProduct, productCategory, productPrice, productName, productDescription, productPhoto, productNotSaled)  <> ((Product.apply _).tupled, Product.unapply)
 
   }
 
-  val product = TableQuery[ProductTable]
+  private val product = TableQuery[ProductTable]
   import categoryRepository.CategoryTable
-  val category = TableQuery[CategoryTable]
+  private val category = TableQuery[CategoryTable]
 
   def create(productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: String, productNotSaled: Boolean): Future[Product] = db.run {
     (product.map(c => (c.productCategory, c.productPrice, c.productName, c.productDescription, c.productPhoto, c.productNotSaled))
@@ -51,4 +53,5 @@ class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categ
     product.result
   }
 
+  def findById(id: Int): Future[Option[Product]] = db.run(product.filter(_.idProduct === id).result.headOption)
 }

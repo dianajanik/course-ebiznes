@@ -3,7 +3,6 @@ package models
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-import models.ProductRepository
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
@@ -17,25 +16,26 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class StockRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, productRepository: ProductRepository)
                                                                                (implicit ec: ExecutionContext) {
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
+  import productRepository.ProductTable
 
   class StockTable(tag: Tag) extends Table[Stock](tag, "Stock"){
 
     def idStock = column[Int]("idStock", O.PrimaryKey, O.AutoInc)
     def idProduct = column[Int]("idProduct")
     def quantity = column[Int]("quantity")
-    def idProduct_fk = foreignKey("cat_fk",idProduct, product)(_.idProduct)
+    private def idProduct_fk = foreignKey("cat_fk",idProduct, product)(_.idProduct)
 
 
     def * = (idStock, idProduct, quantity)  <> ((Stock.apply _).tupled, Stock.unapply)
 
   }
   import productRepository.ProductTable
-  val stock = TableQuery[StockTable]
-  val product = TableQuery[ProductTable]
+  private val stock = TableQuery[StockTable]
+  private val product = TableQuery[ProductTable]
 
   def create(idProduct: Int, quantity: Int): Future[Stock] = db.run {
     (stock.map(c => (c.idProduct, c.quantity))
@@ -47,5 +47,6 @@ class StockRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, product
   def list(): Future[Seq[Stock]] = db.run {
     stock.result
   }
+  def findById(id: Int): Future[Option[Stock]] = db.run(stock.filter(_.idStock === id).result.headOption)
 
 }

@@ -15,7 +15,7 @@ import scala.concurrent.{ Future, ExecutionContext }
   */
 @Singleton
 class CategoryRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
@@ -25,13 +25,13 @@ class CategoryRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
     def idCategory = column[Int]("idCategory", O.PrimaryKey, O.AutoInc)
     def categoryName = column[String]("categoryName", O.Unique)
     def categoryUpper = column[Int]("categoryUpper")
-    def categoryUpper_fk = foreignKey("cat_fk",categoryUpper, category)(_.idCategory)
+    private def categoryUpper_fk = foreignKey("cat_fk",categoryUpper, category)(_.idCategory)
 
 
     def * = (idCategory, categoryName, categoryUpper)  <> ((Category.apply _).tupled, Category.unapply)
 
   }
-  val category = TableQuery[CategoryTable]
+  private val category = TableQuery[CategoryTable]
 
   def create(categoryName: String, categoryUpper: Int): Future[Category] = db.run {
     (category.map(c => (c.categoryName, c.categoryUpper))
@@ -44,4 +44,5 @@ class CategoryRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
     category.result
   }
 
+  def findById(id: Int): Future[Option[Category]] = db.run(category.filter(_.idCategory === id).result.headOption)
 }

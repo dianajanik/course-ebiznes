@@ -16,7 +16,7 @@ import scala.concurrent.{ Future, ExecutionContext }
 */
 @Singleton
 class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
@@ -38,7 +38,7 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
 
   }
 
-  val user = TableQuery[UserTable]
+  private val user = TableQuery[UserTable]
 
   def create(userEmail: String, userPassword: String, userName: String, userSurname: String,
              userStreet: String, userHomeNumber: String, userCity: String, userCountry: String, userPostalCode: String): Future[User] = db.run {
@@ -51,5 +51,7 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
   def list(): Future[Seq[User]] = db.run {
     user.result
   }
+
+  def findById(id: Int): Future[Option[User]] = db.run(user.filter(_.idUser === id).result.headOption)
 
 }

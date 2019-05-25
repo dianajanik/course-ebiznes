@@ -1,4 +1,4 @@
-# --- !Ups
+--- !Ups
 
 -- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
 --
@@ -159,7 +159,7 @@ CREATE TABLE `User` (
 
 -- Dump completed on 2019-04-27 18:48:34
 
-# --- !Downs
+--- !Downs
 
 DROP TABLE IF EXISTS `Admin`;
 DROP TABLE IF EXISTS `Category`;

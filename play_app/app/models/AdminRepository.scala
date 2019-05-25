@@ -15,7 +15,7 @@ import scala.concurrent.{ Future, ExecutionContext }
   */
 @Singleton
 class AdminRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
@@ -31,7 +31,7 @@ class AdminRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
 
   }
 
-  val admin = TableQuery[AdminTable]
+  private val admin = TableQuery[AdminTable]
 
   def create(adminUsername: String, adminPassword: String): Future[Admin] = db.run {
     (admin.map(c => (c.adminUsername, c.adminPassword))
@@ -43,5 +43,7 @@ class AdminRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
   def list(): Future[Seq[Admin]] = db.run {
     admin.result
   }
+
+  def findById(id: Int): Future[Option[Admin]] = db.run(admin.filter(_.idAdmin === id).result.headOption)
 
 }

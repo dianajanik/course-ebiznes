@@ -6,6 +6,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
+import slick.sql.SqlProfile.ColumnOption.SqlType
 
 /**
   * Created by dianajanik on 27.04.2019
@@ -18,7 +19,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TransactionRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, userRepository: UserRepository)
                               (implicit ec: ExecutionContext) {
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
@@ -27,16 +28,17 @@ class TransactionRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, u
 
     def idTransaction = column[Int]("idTransaction", O.PrimaryKey, O.AutoInc)
     def idUser = column[Int]("idUser")
-    def transactionDate = column[Timestamp]("transactionDate")
-    def idUser_fk = foreignKey("cat_fk",idUser, user)(_.idUser)
+    def transactionDate = column[Timestamp]("transactionDate", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
+    private def idUser_fk = foreignKey("cat_fk",idUser, user)(_.idUser)
 
 
     def * = (idTransaction, idUser, transactionDate)  <> ((Transaction.apply _).tupled, Transaction.unapply)
 
   }
+
   import userRepository.UserTable
-  val transaction = TableQuery[TransactionTable]
-  val user = TableQuery[UserTable]
+  private val transaction = TableQuery[TransactionTable]
+  private val user = TableQuery[UserTable]
 
   def create(idUser: Int, transactionDate: Timestamp): Future[Transaction] = db.run {
     (transaction.map(c => (c.idUser, c.transactionDate))
@@ -49,4 +51,5 @@ class TransactionRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, u
     transaction.result
   }
 
+  def findById(id: Int): Future[Option[Transaction]] = db.run(transaction.filter(_.idTransaction === id).result.headOption)
 }
