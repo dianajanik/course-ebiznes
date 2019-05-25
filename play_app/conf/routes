@@ -9,23 +9,34 @@ GET     /products/:id               controllers.ProductController.getById(id: In
 GET     /products                   controllers.ProductController.getAll
 PUT     /products/:id               controllers.ProductController.putById(id: Int)
 POST    /products                   controllers.ProductController.post
+DELETE    /products                 controllers.ProductController.delete(id: Int)
 
 GET     /users                      controllers.UserController.getAll
 GET     /users/:id                  controllers.UserController.getById(id: Int)
-PUT     /users/:id                  controllers.ProductController.putById(id: Int)
-POST    /users                      controllers.ProductController.post
+PUT     /users/:id                  controllers.UserController.putById(id: Int)
+POST    /users                      controllers.UserController.post
+DELETE  /users/:id                  controllers.UserController.delete(id: Int)
 
-GET     /orders                     controllers.OrderController.getAll
-GET     /orders/:id                 controllers.OrderController.getById(id: Int)
-PUT     /orders/:id                 controllers.OrderController.putById(id: Int)
-POST    /orders                     controllers.OrderController.post
+GET     /transaction                controllers.TransactionController.getAll
+GET     /transaction/:id            controllers.TransactionController.getById(id: Int)
+PUT     /transaction/:id            controllers.TransactionController.putById(id: Int)
+POST    /transaction                controllers.TransactionController.post
+DELETE  /transaction                controllers.TransactionController.delete(id: Int)
+
+GET     /subtransaction             controllers.SubtransactionController.getAll
+GET     /subtransaction/:id         controllers.SubtransactionController.getById(id: Int)
+PUT     /subtransaction/:id         controllers.SubtransactionController.putById(id: Int)
+POST    /subtransaction             controllers.SubtransactionController.post
+DELETE  /subtransaction             controllers.SubtransactionController.delete(id: Int)
 
 GET     /categories                 controllers.CategoryController.getAll
 GET     /categories/:id             controllers.CategoryController.getById(id: Int)
 PUT     /categories/:id             controllers.CategoryController.putById(id: Int)
 POST    /categories                 controllers.CategoryController.post
+DELETE    /categories               controllers.CategoryController.delete(id: Int)
 
 GET     /stock                      controllers.StockController.getAll
 GET     /stock/:id                  controllers.StockController.getById(id: Int)
 PUT     /stock/:id                  controllers.StockController.putById(id: Int)
 POST    /stock                      controllers.StockController.post
+DELETE    /stock                    controllers.StockController.delete(id: Int)

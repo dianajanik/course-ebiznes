@@ -44,5 +44,9 @@ class StockController @Inject()(cc: ControllerComponents, stockRepository: Stock
     Ok("stock put by id is ready :) ")
   }
 
+  def delete(id: Int) = Action{
+    stockRepository.delete(id)
+    Ok("Successfully removed")
+  }
 }
 

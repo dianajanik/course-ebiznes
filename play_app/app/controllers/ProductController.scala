@@ -43,5 +43,9 @@ class ProductController @Inject()(cc: ControllerComponents, productRepository: P
   def putById(id: Int)  =  Action {
     Ok("Product put by id is ready :) ")
   }
+  def delete(id: Int) = Action{
+    productRepository.delete(id)
+    Ok("Successfully removed")
+  }
 }
 

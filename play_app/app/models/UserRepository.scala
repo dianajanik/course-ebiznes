@@ -53,5 +53,6 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
   }
 
   def findById(id: Int): Future[Option[User]] = db.run(user.filter(_.idUser === id).result.headOption)
+  def delete(id: Int): Future[Unit] = db.run(user.filter(_.idUser === id).delete).map(_ => ())
 
 }

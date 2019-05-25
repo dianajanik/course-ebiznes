@@ -54,4 +54,5 @@ class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categ
   }
 
   def findById(id: Int): Future[Option[Product]] = db.run(product.filter(_.idProduct === id).result.headOption)
+  def delete(id: Int): Future[Unit] = db.run(product.filter(_.idProduct === id).delete).map(_ => ())
 }

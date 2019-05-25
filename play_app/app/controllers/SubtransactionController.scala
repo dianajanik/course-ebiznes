@@ -44,6 +44,10 @@ class SubtransactionController @Inject()(cc: ControllerComponents, subtransactio
     Ok("order put by id is ready")
   }
 
+  def delete(id: Int) = Action{
+    subtransactionRepository.delete(id)
+    Ok("Successfully removed")
+  }
 }
 
 

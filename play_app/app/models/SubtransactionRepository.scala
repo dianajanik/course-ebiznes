@@ -57,4 +57,5 @@ class SubtransactionRepository@Inject()(dbConfigProvider: DatabaseConfigProvider
   }
 
   def findById(id: Int): Future[Option[Subtransaction]] = db.run(subtransaction.filter(_.idSubtransaction === id).result.headOption)
+  def delete(id: Int): Future[Unit] = db.run(subtransaction.filter(_.idSubtransaction === id).delete).map(_ => ())
 }

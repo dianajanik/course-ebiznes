@@ -48,5 +48,5 @@ class StockRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, product
     stock.result
   }
   def findById(id: Int): Future[Option[Stock]] = db.run(stock.filter(_.idStock === id).result.headOption)
-
+  def delete(id: Int): Future[Unit] = db.run(stock.filter(_.idStock === id).delete).map(_ => ())
 }

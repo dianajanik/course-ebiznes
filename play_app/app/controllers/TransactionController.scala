@@ -44,6 +44,11 @@ class TransactionController @Inject()(cc: ControllerComponents, transactionRepos
     Ok("order put by id is ready")
   }
 
+  def delete(id: Int) = Action{
+    transactionRepository.delete(id)
+    Ok("Successfully removed")
+  }
+
 }
 
 

@@ -43,5 +43,10 @@ class CategoryController @Inject()(cc: ControllerComponents, categoryRepository:
     Ok("cat put by id is ready")
   }
 
+  def delete(id: Int) = Action{
+    categoryRepository.delete(id)
+    Ok("Successfully removed")
+  }
+
 }
 
