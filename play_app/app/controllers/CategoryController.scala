@@ -1,11 +1,14 @@
 package controllers
 
+// import play.api.data._
 import javax.inject.Inject
 import models.CategoryRepository
+import play.api.data.Form
+import play.api.data.Forms.{mapping, _}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by dianajanik on 09.04.2019
@@ -21,7 +24,8 @@ class CategoryController @Inject()(cc: ControllerComponents, categoryRepository:
       }
     }
   }
-  def getById(id: Int) ={
+
+  def getById(id: Int) = {
     Action.async { implicit request =>
       val computerAndOptions = for {
         category <- categoryRepository.findById(id)
@@ -35,18 +39,42 @@ class CategoryController @Inject()(cc: ControllerComponents, categoryRepository:
       }
     }
   }
-  def post = Action {
-    Ok("cat post by id is ready")
+
+  val categoryForm: Form[PostCategoryForm] = Form {
+    mapping(
+      "categoryName" -> nonEmptyText,
+      "categoryUpper" -> optional(number)
+    )(PostCategoryForm.apply)(PostCategoryForm.unapply)
   }
+
+  def post =
+    Action.async(parse.json) {
+      implicit request =>
+        categoryForm.bindFromRequest.fold(
+          errorForm => {
+            Future.successful(BadRequest("Not able to post"))
+          },
+          category => {
+            categoryRepository.create(
+              category.categoryName: String,
+              category.categoryUpper: Option[Int]
+            ).map { category =>
+              Created(Json.toJson(category))
+            }
+          }
+        )
+    }
 
   def putById(id: Int) = Action {
     Ok("cat put by id is ready")
   }
 
-  def delete(id: Int) = Action{
+  def delete(id: Int) = Action {
     categoryRepository.delete(id)
     Ok("Successfully removed")
   }
 
 }
+
+case class PostCategoryForm(categoryName: String, categoryUpper: Option[Int])
 

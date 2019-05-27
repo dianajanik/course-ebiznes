@@ -8,35 +8,41 @@ GET     /auth                       controllers.AuthController.index
 GET     /products/:id               controllers.ProductController.getById(id: Int)
 GET     /products                   controllers.ProductController.getAll
 PUT     /products/:id               controllers.ProductController.putById(id: Int)
++nocsrf
 POST    /products                   controllers.ProductController.post
-DELETE    /products                 controllers.ProductController.delete(id: Int)
+DELETE  /products/:id               controllers.ProductController.delete(id: Int)
 
 GET     /users                      controllers.UserController.getAll
 GET     /users/:id                  controllers.UserController.getById(id: Int)
 PUT     /users/:id                  controllers.UserController.putById(id: Int)
++nocsrf
 POST    /users                      controllers.UserController.post
 DELETE  /users/:id                  controllers.UserController.delete(id: Int)
 
 GET     /transaction                controllers.TransactionController.getAll
 GET     /transaction/:id            controllers.TransactionController.getById(id: Int)
 PUT     /transaction/:id            controllers.TransactionController.putById(id: Int)
++nocsrf
 POST    /transaction                controllers.TransactionController.post
-DELETE  /transaction                controllers.TransactionController.delete(id: Int)
+DELETE  /transaction/:id            controllers.TransactionController.delete(id: Int)
 
 GET     /subtransaction             controllers.SubtransactionController.getAll
 GET     /subtransaction/:id         controllers.SubtransactionController.getById(id: Int)
 PUT     /subtransaction/:id         controllers.SubtransactionController.putById(id: Int)
++nocsrf
 POST    /subtransaction             controllers.SubtransactionController.post
-DELETE  /subtransaction             controllers.SubtransactionController.delete(id: Int)
+DELETE  /subtransaction/:id         controllers.SubtransactionController.delete(id: Int)
 
 GET     /categories                 controllers.CategoryController.getAll
 GET     /categories/:id             controllers.CategoryController.getById(id: Int)
 PUT     /categories/:id             controllers.CategoryController.putById(id: Int)
++nocsrf
 POST    /categories                 controllers.CategoryController.post
-DELETE    /categories               controllers.CategoryController.delete(id: Int)
+DELETE  /categories/:id             controllers.CategoryController.delete(id: Int)
 
 GET     /stock                      controllers.StockController.getAll
 GET     /stock/:id                  controllers.StockController.getById(id: Int)
 PUT     /stock/:id                  controllers.StockController.putById(id: Int)
++nocsrf
 POST    /stock                      controllers.StockController.post
-DELETE    /stock                    controllers.StockController.delete(id: Int)
+DELETE  /stock/:id                  controllers.StockController.delete(id: Int)

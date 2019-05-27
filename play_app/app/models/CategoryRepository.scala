@@ -1,9 +1,11 @@
 package models
 
-import javax.inject.{ Inject, Singleton }
+import com.google.common.base.Optional
+import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-import scala.concurrent.{ Future, ExecutionContext }
+
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by dianajanik on 27.04.2019
@@ -24,7 +26,7 @@ class CategoryRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
     def idCategory = column[Int]("idCategory", O.PrimaryKey, O.AutoInc)
     def categoryName = column[String]("categoryName", O.Unique)
-    def categoryUpper = column[Int]("categoryUpper")
+    def categoryUpper = column[Option[Int]]("categoryUpper")
     private def categoryUpper_fk = foreignKey("cat_fk",categoryUpper, category)(_.idCategory)
 
 
@@ -33,7 +35,7 @@ class CategoryRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
   }
   private val category = TableQuery[CategoryTable]
 
-  def create(categoryName: String, categoryUpper: Int): Future[Category] = db.run {
+  def create(categoryName: String, categoryUpper: Option[Int]): Future[Category] = db.run {
     (category.map(c => (c.categoryName, c.categoryUpper))
       returning category.map(_.idCategory)
       into { case ((categoryUsername, categoryPassword), idCategory) => Category(idCategory,categoryUsername, categoryPassword)}

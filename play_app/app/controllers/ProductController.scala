@@ -7,6 +7,15 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext
 
+// import play.api.data._
+import javax.inject.Inject
+import models.CategoryRepository
+import play.api.data.Form
+import play.api.data.Forms.{mapping, _}
+import play.api.libs.json.Json
+import play.api.mvc.{AbstractController, ControllerComponents}
+
+import scala.concurrent.{ExecutionContext, Future}
 /**
   * Created by dianajanik on 09.04.2019
   */
@@ -36,9 +45,36 @@ class ProductController @Inject()(cc: ControllerComponents, productRepository: P
     }
   }
 
-  def post =  Action {
-    Ok("Product post by id is ready :) ")
+  val productForm: Form[PostProductForm] = Form {
+    mapping(
+      "productCategory" -> number,
+      "productPrice"-> number,
+      "productName" -> nonEmptyText,
+      "productDescription" -> nonEmptyText,
+      "productPhoto"-> nonEmptyText,
+      "productNotSaled" -> boolean
+    )(PostProductForm.apply)(PostProductForm.unapply)
   }
+
+  def post = Action.async { implicit request =>
+      productForm.bindFromRequest.fold(
+        errorForm => {
+          Future.successful(BadRequest("Failed post"))
+        },
+        product => {
+          productRepository.create(
+            product.productCategory,
+            product.productPrice,
+            product.productName,
+            product.productDescription,
+            product.productPhoto,
+            product.productNotSaled
+          ).map { product =>
+            Created(Json.toJson((product)))
+          }
+        }
+      )
+    }
 
   def putById(id: Int)  =  Action {
     Ok("Product put by id is ready :) ")
@@ -49,3 +85,4 @@ class ProductController @Inject()(cc: ControllerComponents, productRepository: P
   }
 }
 
+case class PostProductForm(productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: String, productNotSaled: Boolean)

@@ -5,7 +5,21 @@ import models.StockRepository
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 
+import scala.concurrent.{ExecutionContext, Future}
+import models.{ProductRepository, UserRepository}
+import play.api.libs.json.Json
+import play.api.mvc.{AbstractController, ControllerComponents}
+
 import scala.concurrent.ExecutionContext
+
+// import play.api.data._
+import javax.inject.Inject
+import models.CategoryRepository
+import play.api.data.Form
+import play.api.data.Forms.{mapping, _}
+import play.api.libs.json.Json
+import play.api.mvc.{AbstractController, ControllerComponents}
+
 
 /**
   * Created by dianajanik on 09.04.2019
@@ -36,8 +50,27 @@ class StockController @Inject()(cc: ControllerComponents, stockRepository: Stock
       }
     }
 
-  def post =  Action {
-    Ok("stock post by id is ready :) ")
+  val stockForm: Form[PostStockForm] = Form {
+    mapping(
+      "idProduct" -> number,
+      "quantity"-> number
+    )(PostStockForm.apply)(PostStockForm.unapply)
+  }
+
+  def post = Action.async { implicit request =>
+    stockForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(BadRequest("Failed to post stock"))
+      },
+      stock => {
+        stockRepository.create(
+          stock.idProduct,
+          stock.quantity
+        ).map { inventory =>
+          Created(Json.toJson(inventory))
+        }
+      }
+    )
   }
 
   def putById(id: Int)  =  Action {
@@ -50,3 +83,4 @@ class StockController @Inject()(cc: ControllerComponents, stockRepository: Stock
   }
 }
 
+case class PostStockForm(idProduct: Int, quantity: Int)

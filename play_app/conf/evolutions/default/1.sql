@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `Admin`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Admin` (
-  `idAdmin` int(11) NOT NULL,
+  `idAdmin` int(11) NOT NULL AUTO_INCREMENT,
   `adminUsername` varchar(45) NOT NULL,
   `adminPassword` varchar(45) NOT NULL,
   PRIMARY KEY (`idAdmin`),
@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS `Category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Category` (
-  `idCategory` int(11) NOT NULL,
+  `idCategory` int(11) NOT NULL AUTO_INCREMENT,
   `categoryName` varchar(45) NOT NULL,
   `categoryUpper` int(11) DEFAULT NULL,
   PRIMARY KEY (`idCategory`),
@@ -58,7 +58,7 @@ DROP TABLE IF EXISTS `Product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Product` (
-  `idProduct` int(11) NOT NULL,
+  `idProduct` int(11) NOT NULL AUTO_INCREMENT,
   `productCategory` int(11) NOT NULL,
   `productPrice` int(11) NOT NULL,
   `productName` varchar(45) NOT NULL,
@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `Stock`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Stock` (
-  `idStock` int(11) NOT NULL,
+  `idStock` int(11) NOT NULL AUTO_INCREMENT,
   `idProduct` int(11) NOT NULL,
   `quantity` varchar(45) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idStock`),
@@ -96,7 +96,7 @@ DROP TABLE IF EXISTS `Subtransaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Subtransaction` (
-  `idSubtransaction` int(11) NOT NULL,
+  `idSubtransaction` int(11) NOT NULL AUTO_INCREMENT,
   `idTransaction` int(11) NOT NULL,
   `idProduct` int(11) DEFAULT NULL,
   `subtransactionQuantity` int(11) DEFAULT NULL,
@@ -116,7 +116,7 @@ DROP TABLE IF EXISTS `Transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Transaction` (
-  `idTransaction` int(11) NOT NULL,
+  `idTransaction` int(11) NOT NULL AUTO_INCREMENT,
   `idUser` int(11) DEFAULT NULL,
   `transactionDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idTransaction`),

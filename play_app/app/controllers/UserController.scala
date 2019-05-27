@@ -53,8 +53,27 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     )(CreateUserForm.apply)(CreateUserForm.unapply)
   }
 
-  def post = Action {
-    Ok("User post by id is ready")
+  def post = Action.async { implicit request =>
+    userForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(BadRequest("Failed to post user"))
+      },
+      user => {
+        userRepository.create(
+         user.userEmail,
+          user.userPassword,
+          user.userName,
+          user.userSurname,
+          user.userStreet,
+          user.userHomeNumber,
+          user.userCity,
+          user.userCountry,
+          user.userPostalCode
+        ).map { user =>
+          Created(Json.toJson(user))
+        }
+      }
+    )
   }
 
   def putById(id: Int) = Action {

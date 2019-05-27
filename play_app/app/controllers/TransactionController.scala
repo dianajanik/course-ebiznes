@@ -1,11 +1,22 @@
 package controllers
 
+import java.sql.Timestamp
 import javax.inject.Inject
 import models.{ProductRepository, TransactionRepository}
+import play.api.data.Form
+import play.api.data.Forms.mapping
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import javax.inject._
+import play.api.mvc._
+import play.api.data.Form
+import play.api.data.Forms.mapping
+import play.api.libs.json.Json
+
+import play.api.data.Forms._
+
 
 /**
   * Created by dianajanik on 09.04.2019
@@ -36,8 +47,27 @@ class TransactionController @Inject()(cc: ControllerComponents, transactionRepos
     }
   }
 
-  def post = Action {
-    Ok("order post by id is ready")
+  val transactionForm: Form[PostTransactionForm] = Form {
+    mapping(
+      "idUser" -> number,
+      "transactionDate" -> sqlTimestamp
+    )(PostTransactionForm.apply)(PostTransactionForm.unapply)
+  }
+
+  def post = Action.async { implicit request =>
+    transactionForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(BadRequest("Failed to post stock"))
+      },
+      transaction => {
+        transactionRepository.create(
+          transaction.idUser,
+          transaction.transactionDate
+        ).map { inventory =>
+          Created(Json.toJson(inventory))
+        }
+      }
+    )
   }
 
   def putById(id: Int) = Action {
@@ -50,5 +80,7 @@ class TransactionController @Inject()(cc: ControllerComponents, transactionRepos
   }
 
 }
+
+case class PostTransactionForm(idUser: Int, transactionDate: Timestamp )
 
 

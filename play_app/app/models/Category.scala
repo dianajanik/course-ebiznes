@@ -6,7 +6,7 @@ package models
 
 import play.api.libs.json._
 
-case class Category(idCategory: Int, categoryName: String, categoryUpper: Int)
+case class Category(idCategory: Int, categoryName: String, categoryUpper: Option[Int])
 
 object Category {
   implicit val categoryFormat = Json.format[Category]
