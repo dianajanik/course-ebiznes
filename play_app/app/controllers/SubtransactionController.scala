@@ -76,9 +76,25 @@ class SubtransactionController @Inject()(cc: ControllerComponents, subtransactio
     )
   }
 
-  def putById(id: Int) = Action {
-    Ok("order put by id is ready")
-  }
+  def putById(id: Int) =
+    Action.async(parse.json){
+      implicit request =>
+        subtransactionForm.bindFromRequest.fold(
+          _ => {
+            Future.successful(BadRequest("Failed put"))
+          },
+          subtransaction => {
+            subtransactionRepository.update(models.Subtransaction(
+              id,
+              subtransaction.idTransaction,
+              subtransaction.idProduct,
+              subtransaction.subtransactionQuantity
+            )).map({ _ =>
+              Ok
+            })
+          }
+        )
+    }
 
   def delete(id: Int) = Action{
     subtransactionRepository.delete(id)

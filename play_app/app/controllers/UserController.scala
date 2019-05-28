@@ -42,7 +42,7 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
   val userForm: Form[CreateUserForm] = Form {
     mapping(
       "userEmail" -> nonEmptyText,
-      "userPassword:"-> nonEmptyText,
+      "userPassword"-> nonEmptyText,
       "userName" -> nonEmptyText,
       "userSurname" -> nonEmptyText,
       "userStreet"-> nonEmptyText,
@@ -76,9 +76,31 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     )
   }
 
-  def putById(id: Int) = Action {
-    Ok("USER put by id is ready")
-  }
+  def putById(id: Int) =
+    Action.async(parse.json){
+      implicit request =>
+        userForm.bindFromRequest.fold(
+          _ => {
+            Future.successful(BadRequest("Failed put"))
+          },
+          user => {
+            userRepository.update(models.User(
+              id,
+              user.userEmail,
+              user.userPassword,
+              user.userName,
+              user.userSurname,
+              user.userStreet,
+              user.userHomeNumber,
+              user.userCity,
+              user.userCountry,
+              user.userPostalCode
+            )).map({ _ =>
+              Ok
+            })
+          }
+        )
+    }
 
   def delete(id: Int) = Action{
     userRepository.delete(id)

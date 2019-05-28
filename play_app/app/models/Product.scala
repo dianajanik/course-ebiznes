@@ -6,7 +6,7 @@ package models
 
 import play.api.libs.json._
 
-case class Product(idProduct: Int, productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: String, productNotSaled: Boolean)
+case class Product(idProduct: Int, productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: Option[String], productNotSaled: Boolean)
 
 object Product {
   implicit val productFormat = Json.format[Product]

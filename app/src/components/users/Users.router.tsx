@@ -1,21 +1,19 @@
 import React from 'react';
-
-import axios from 'axios'
 import {
   BrowserRouter,
   Switch,
   Route,
 } from 'react-router-dom';
 
-import Products from './Products';
-import CreateProduct from './create/CreateProduct';
+import Users from './Users';
+import CreateUser from './create/CreateUser';
 
 const ProductsRouter = () => {
   return (
     <BrowserRouter>
     <Switch>
-      <Route exact path="/products" component={Products} />
-      <Route path="/products/create" component={CreateProduct} />
+      <Route exact path="/users" component={Users} />
+      <Route path="/users/create" component={CreateUser} />
     </Switch>
   </BrowserRouter>
   );

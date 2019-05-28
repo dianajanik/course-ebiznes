@@ -7,6 +7,7 @@ GET     /auth                       controllers.AuthController.index
 
 GET     /products/:id               controllers.ProductController.getById(id: Int)
 GET     /products                   controllers.ProductController.getAll
++nocsrf
 PUT     /products/:id               controllers.ProductController.putById(id: Int)
 +nocsrf
 POST    /products                   controllers.ProductController.post
@@ -14,35 +15,48 @@ DELETE  /products/:id               controllers.ProductController.delete(id: Int
 
 GET     /users                      controllers.UserController.getAll
 GET     /users/:id                  controllers.UserController.getById(id: Int)
++nocsrf
 PUT     /users/:id                  controllers.UserController.putById(id: Int)
 +nocsrf
 POST    /users                      controllers.UserController.post
 DELETE  /users/:id                  controllers.UserController.delete(id: Int)
 
-GET     /transaction                controllers.TransactionController.getAll
-GET     /transaction/:id            controllers.TransactionController.getById(id: Int)
-PUT     /transaction/:id            controllers.TransactionController.putById(id: Int)
+GET     /transactions                controllers.TransactionController.getAll
+GET     /transactions/:id            controllers.TransactionController.getById(id: Int)
 +nocsrf
-POST    /transaction                controllers.TransactionController.post
-DELETE  /transaction/:id            controllers.TransactionController.delete(id: Int)
+PUT     /transactions/:id            controllers.TransactionController.putById(id: Int)
++nocsrf
+POST    /transactions                controllers.TransactionController.post
+DELETE  /transactions/:id            controllers.TransactionController.delete(id: Int)
 
-GET     /subtransaction             controllers.SubtransactionController.getAll
-GET     /subtransaction/:id         controllers.SubtransactionController.getById(id: Int)
-PUT     /subtransaction/:id         controllers.SubtransactionController.putById(id: Int)
+GET     /subtransactions             controllers.SubtransactionController.getAll
+GET     /subtransactions/:id         controllers.SubtransactionController.getById(id: Int)
 +nocsrf
-POST    /subtransaction             controllers.SubtransactionController.post
-DELETE  /subtransaction/:id         controllers.SubtransactionController.delete(id: Int)
+PUT     /subtransactions/:id         controllers.SubtransactionController.putById(id: Int)
++nocsrf
+POST    /subtransactions             controllers.SubtransactionController.post
+DELETE  /subtransactions/:id         controllers.SubtransactionController.delete(id: Int)
 
 GET     /categories                 controllers.CategoryController.getAll
 GET     /categories/:id             controllers.CategoryController.getById(id: Int)
++nocsrf
 PUT     /categories/:id             controllers.CategoryController.putById(id: Int)
 +nocsrf
 POST    /categories                 controllers.CategoryController.post
 DELETE  /categories/:id             controllers.CategoryController.delete(id: Int)
 
-GET     /stock                      controllers.StockController.getAll
-GET     /stock/:id                  controllers.StockController.getById(id: Int)
-PUT     /stock/:id                  controllers.StockController.putById(id: Int)
+GET     /stocks                      controllers.StockController.getAll
+GET     /stocks/:id                  controllers.StockController.getById(id: Int)
 +nocsrf
-POST    /stock                      controllers.StockController.post
-DELETE  /stock/:id                  controllers.StockController.delete(id: Int)
+PUT     /stocks/:id                  controllers.StockController.putById(id: Int)
++nocsrf
+POST    /stocks                      controllers.StockController.post
+DELETE  /stocks/:id                  controllers.StockController.delete(id: Int)
+
+GET     /admins                      controllers.AdminController.getAll
+GET     /admins/:id                  controllers.AdminController.getById(id: Int)
++nocsrf
+PUT     /admins/:id                  controllers.AdminController.putById(id: Int)
++nocsrf
+POST    /admins                      controllers.AdminController.post
+DELETE  /admins/:id                  controllers.AdminController.delete(id: Int)

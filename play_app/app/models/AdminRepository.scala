@@ -47,4 +47,7 @@ class AdminRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
   def findById(id: Int): Future[Option[Admin]] = db.run(admin.filter(_.idAdmin === id).result.headOption)
   def delete(id: Int): Future[Unit] = db.run(admin.filter(_.idAdmin === id).delete).map(_ => ())
 
+  def update(value: Admin): Future[Int] = db.run {
+    admin.insertOrUpdate(value)
+  }
 }

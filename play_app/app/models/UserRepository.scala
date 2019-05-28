@@ -42,7 +42,7 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
 
   def create(userEmail: String, userPassword: String, userName: String, userSurname: String,
              userStreet: String, userHomeNumber: String, userCity: String, userCountry: String, userPostalCode: String): Future[User] = db.run {
-    (user.map(c => (c.userName, c.userPassword, c.userName, c.userSurname, c.userStreet, c.userHomeNumber, c.userCity, c.userCountry, c.userPostalCode))
+    (user.map(c => (c.userEmail, c.userPassword, c.userName, c.userSurname, c.userStreet, c.userHomeNumber, c.userCity, c.userCountry, c.userPostalCode))
       returning user.map(_.idUser)
       into { case ((userEmail, userPassword, userName, userSurname, userStreet, userHomeNumber, userCity, userCountry, userPostalCode), idUser) => User(idUser,userEmail, userPassword, userName, userSurname, userStreet, userHomeNumber, userCity, userCountry, userPostalCode )}
       ) += (userEmail, userPassword, userName, userSurname, userStreet, userHomeNumber, userCity, userCountry, userPostalCode)
@@ -55,4 +55,7 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
   def findById(id: Int): Future[Option[User]] = db.run(user.filter(_.idUser === id).result.headOption)
   def delete(id: Int): Future[Unit] = db.run(user.filter(_.idUser === id).delete).map(_ => ())
 
+  def update(value: User): Future[Int] = db.run {
+    user.insertOrUpdate(value)
+  }
 }

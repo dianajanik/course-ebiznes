@@ -70,10 +70,24 @@ class TransactionController @Inject()(cc: ControllerComponents, transactionRepos
     )
   }
 
-  def putById(id: Int) = Action {
-    Ok("order put by id is ready")
-  }
-
+  def putById(id: Int) =
+    Action.async(parse.json){
+      implicit request =>
+        transactionForm.bindFromRequest.fold(
+          _ => {
+            Future.successful(BadRequest("Failed put"))
+          },
+          transaction => {
+            transactionRepository.update(models.Transaction(
+              id,
+              transaction.idUser,
+              transaction.transactionDate
+            )).map({ _ =>
+              Ok
+            })
+          }
+        )
+    }
   def delete(id: Int) = Action{
     transactionRepository.delete(id)
     Ok("Successfully removed")

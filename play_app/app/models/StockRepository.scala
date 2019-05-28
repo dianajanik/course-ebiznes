@@ -49,4 +49,8 @@ class StockRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, product
   }
   def findById(id: Int): Future[Option[Stock]] = db.run(stock.filter(_.idStock === id).result.headOption)
   def delete(id: Int): Future[Unit] = db.run(stock.filter(_.idStock === id).delete).map(_ => ())
+
+  def update(value: Stock): Future[Int] = db.run {
+    stock.insertOrUpdate(value)
+  }
 }

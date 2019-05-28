@@ -51,7 +51,7 @@ class ProductController @Inject()(cc: ControllerComponents, productRepository: P
       "productPrice"-> number,
       "productName" -> nonEmptyText,
       "productDescription" -> nonEmptyText,
-      "productPhoto"-> nonEmptyText,
+      "productPhoto"-> optional(nonEmptyText),
       "productNotSaled" -> boolean
     )(PostProductForm.apply)(PostProductForm.unapply)
   }
@@ -76,13 +76,32 @@ class ProductController @Inject()(cc: ControllerComponents, productRepository: P
       )
     }
 
-  def putById(id: Int)  =  Action {
-    Ok("Product put by id is ready :) ")
-  }
+  def putById(id: Int) =
+    Action.async(parse.json){
+      implicit request =>
+        productForm.bindFromRequest.fold(
+          _ => {
+            Future.successful(BadRequest("Failed put"))
+          },
+          product => {
+            productRepository.update(models.Product(
+              id,
+              product.productCategory,
+              product.productPrice,
+              product.productName,
+              product.productDescription,
+              product.productPhoto,
+              product.productNotSaled
+            )).map({ _ =>
+              Ok
+            })
+          }
+        )
+    }
   def delete(id: Int) = Action{
     productRepository.delete(id)
     Ok("Successfully removed")
   }
 }
 
-case class PostProductForm(productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: String, productNotSaled: Boolean)
+case class PostProductForm(productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: Option[String], productNotSaled: Boolean)

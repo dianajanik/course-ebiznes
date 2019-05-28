@@ -3,11 +3,11 @@ import logo from './logo.svg';
 import axios from 'axios'
 type Product = {
   idProduct: number,
-  productCategory: String,
+  productCategory: string,
   productPrice: number,
-  productName: String,
-  productDescription: String,
-  productPhoto: String,
+  productName: string,
+  productDescription: string,
+  productPhoto: string,
   productNotSaled: boolean
 }
 type ProductsState = {
@@ -42,12 +42,14 @@ class Products extends Component<any, ProductsState>{
               <th scope="col">Category</th>
               <th scope="col">Name</th>
               <th scope="col">Price</th>
+              <th scope="col">Description</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => {
               return (
                 <tr key={product.idProduct}>
+                  <td>{product.idProduct}</td>
                   <td>{product.productCategory}</td>
                   <td>{product.productName}</td>
                   <td>{product.productPrice}</td>
@@ -58,7 +60,6 @@ class Products extends Component<any, ProductsState>{
           </tbody>
         </table>
       </div>
-
     )
   }
 }

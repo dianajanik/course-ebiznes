@@ -53,4 +53,8 @@ class TransactionRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, u
 
   def findById(id: Int): Future[Option[Transaction]] = db.run(transaction.filter(_.idTransaction === id).result.headOption)
   def delete(id: Int): Future[Unit] = db.run(transaction.filter(_.idTransaction === id).delete).map(_ => ())
+
+  def update(value:Transaction): Future[Int] = db.run {
+    transaction.insertOrUpdate(value)
+  }
 }

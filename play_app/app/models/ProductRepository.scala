@@ -30,7 +30,7 @@ class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categ
     def productCategory = column[Int]("productCategory")
     def productPrice = column[Int]("productPrice")
     def productDescription = column[String]("productDescription")
-    def productPhoto = column[String]("productPhoto")
+    def productPhoto = column[Option[String]]("productPhoto")
     def productNotSaled = column[Boolean]("productNotSaled")
     private def productCategory_fk = foreignKey("cat_fk",productCategory, category)(_.idCategory)
 
@@ -42,7 +42,7 @@ class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categ
   import categoryRepository.CategoryTable
   private val category = TableQuery[CategoryTable]
 
-  def create(productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: String, productNotSaled: Boolean): Future[Product] = db.run {
+  def create(productCategory: Int, productPrice: Int, productName: String, productDescription: String, productPhoto: Option[String], productNotSaled: Boolean): Future[Product] = db.run {
     (product.map(c => (c.productCategory, c.productPrice, c.productName, c.productDescription, c.productPhoto, c.productNotSaled))
       returning product.map(_.idProduct)
       into { case ((productCategory, productPrice, productName, productDescription, productPhoto, productNotSaled), idProduct) => Product(idProduct,productCategory, productPrice, productName, productDescription, productPhoto, productNotSaled)}
@@ -55,4 +55,8 @@ class ProductRepository@Inject()(dbConfigProvider: DatabaseConfigProvider, categ
 
   def findById(id: Int): Future[Option[Product]] = db.run(product.filter(_.idProduct === id).result.headOption)
   def delete(id: Int): Future[Unit] = db.run(product.filter(_.idProduct === id).delete).map(_ => ())
+
+  def update(value: Product): Future[Int] = db.run {
+    product.insertOrUpdate(value)
+  }
 }

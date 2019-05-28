@@ -9,9 +9,12 @@ import {
 } from 'react-router-dom';
 
 import Home from './components/home/Home';
-import Products from './components/products/Products';
 import './App.scss';
 import ProductsRouter from './components/products/Products.router'
+import CategoriesRouter from './components/categories/Categories.router'
+import UsersRouter from './components/users/Users.router'
+import AdminsRouter from './components/admins/Admins.router'
+import StockRouter from './components/stocks/Stocks.router'
 axios.defaults.baseURL = 'http://localhost:9000'
 
 const App = () => {
@@ -19,7 +22,11 @@ const App = () => {
     <BrowserRouter>
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route exact path="/products" component={ProductsRouter} />
+      <Route path="/products" component={ProductsRouter} />
+      <Route path="/categories" component={CategoriesRouter} />
+      <Route path="/users" component={UsersRouter} />
+      <Route path="/admins" component={AdminsRouter} />
+      <Route path="/stocks" component={StockRouter} />
      
     </Switch>
   </BrowserRouter>

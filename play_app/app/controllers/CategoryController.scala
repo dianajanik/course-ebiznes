@@ -65,9 +65,24 @@ class CategoryController @Inject()(cc: ControllerComponents, categoryRepository:
         )
     }
 
-  def putById(id: Int) = Action {
-    Ok("cat put by id is ready")
-  }
+  def putById(id: Int) =
+      Action.async(parse.json){
+        implicit request =>
+          categoryForm.bindFromRequest.fold(
+            _ => {
+              Future.successful(BadRequest("Failed put"))
+            },
+            category => {
+              categoryRepository.update(models.Category(
+                id,
+                category.categoryName,
+                category.categoryUpper
+              )).map({ _ =>
+                Ok
+              })
+            }
+          )
+      }
 
   def delete(id: Int) = Action {
     categoryRepository.delete(id)

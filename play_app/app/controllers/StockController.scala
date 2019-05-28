@@ -66,16 +66,31 @@ class StockController @Inject()(cc: ControllerComponents, stockRepository: Stock
         stockRepository.create(
           stock.idProduct,
           stock.quantity
-        ).map { inventory =>
-          Created(Json.toJson(inventory))
+        ).map { stock =>
+          Created(Json.toJson(stock))
         }
       }
     )
   }
 
-  def putById(id: Int)  =  Action {
-    Ok("stock put by id is ready :) ")
-  }
+  def putById(id: Int) =
+    Action.async(parse.json){
+      implicit request =>
+        stockForm.bindFromRequest.fold(
+          _ => {
+            Future.successful(BadRequest("Failed put"))
+          },
+          stock => {
+            stockRepository.update(models.Stock(
+              id,
+              stock.idProduct,
+              stock.quantity
+            )).map({ _ =>
+              Ok
+            })
+          }
+        )
+    }
 
   def delete(id: Int) = Action{
     stockRepository.delete(id)
